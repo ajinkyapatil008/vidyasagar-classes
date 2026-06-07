@@ -1,0 +1,40 @@
+version: '3.8'
+
+# VidyaSagar Classes — Local Development Databases
+# Run with: docker compose up -d
+# Stop with: docker compose down
+
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: vidyasagar-postgres
+    environment:
+      POSTGRES_DB: vidyasagar
+      POSTGRES_USER: vidya_admin
+      POSTGRES_PASSWORD: vidya@2024
+    ports:
+      - "5432:5432"
+    volumes:
+      - vidyasagar_pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:7
+    container_name: vidyasagar-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - vidyasagar_mongo_data:/data/db
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: vidyasagar-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+volumes:
+  vidyasagar_pg_data:
+  vidyasagar_mongo_data:
