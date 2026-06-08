@@ -1,9 +1,3 @@
-version: '3.8'
-
-# VidyaSagar Classes — Local Development Databases
-# Run with: docker compose up -d
-# Stop with: docker compose down
-
 services:
 
   postgres:
@@ -12,9 +6,9 @@ services:
     environment:
       POSTGRES_DB: vidyasagar
       POSTGRES_USER: vidya_admin
-      POSTGRES_PASSWORD: vidya@2024
+      POSTGRES_PASSWORD: vidyasagar123
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - vidyasagar_pg_data:/var/lib/postgresql/data
     restart: unless-stopped
