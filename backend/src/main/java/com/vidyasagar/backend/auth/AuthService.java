@@ -2,6 +2,7 @@ package com.vidyasagar.backend.auth;
 
 import com.vidyasagar.backend.common.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +16,10 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
 
-        // Check if email already exists
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already registered");
         }
 
-        // Build and save user with hashed password
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
@@ -31,7 +30,6 @@ public class AuthService {
 
         User saved = userRepository.save(user);
 
-        // Generate JWT for the newly registered user
         String token = jwtUtil.generateToken(
                 saved.getId(),
                 saved.getEmail(),
@@ -50,16 +48,14 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
 
-        // Find user by email
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+                .orElseThrow(() ->
+                        new BadCredentialsException("Invalid email or password"));
 
-        // Check password against BCrypt hash
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+            throw new BadCredentialsException("Invalid email or password");
         }
 
-        // Generate JWT
         String token = jwtUtil.generateToken(
                 user.getId(),
                 user.getEmail(),
