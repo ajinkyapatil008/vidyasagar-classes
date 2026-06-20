@@ -34,7 +34,6 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.GET,
                                 "/api/courses", "/api/courses/{id}").permitAll()
                         .anyRequest().authenticated()
-                        .anyRequest().authenticated()
                 )
                 // Return 401 instead of redirecting to login page
                 .exceptionHandling(ex -> ex

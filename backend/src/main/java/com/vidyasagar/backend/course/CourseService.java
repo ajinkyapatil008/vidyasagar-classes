@@ -86,6 +86,25 @@ public class CourseService {
     }
 
     // PUBLIC — browse all published courses
+//    public List<CourseResponse> getAllPublished(Subject subject,
+//                                                Integer classLevel) {
+//        List<Course> courses;
+//
+//        if (subject != null) {
+//            courses = courseRepository.findByStatusAndSubject(
+//                    CourseStatus.PUBLISHED, subject);
+//        } else if (classLevel != null) {
+//            courses = courseRepository.findByStatusAndClassLevel(
+//                    CourseStatus.PUBLISHED, classLevel);
+//        } else {
+//            courses = courseRepository.findByStatus(CourseStatus.PUBLISHED);
+//        }
+//
+//        return courses.stream()
+//                .map(c -> toResponse(c, List.of()))
+//                .toList();
+//    }
+    // PUBLIC — browse all published courses
     public List<CourseResponse> getAllPublished(Subject subject,
                                                 Integer classLevel) {
         List<Course> courses;
@@ -101,7 +120,12 @@ public class CourseService {
         }
 
         return courses.stream()
-                .map(c -> toResponse(c, List.of()))
+                .map(c -> {
+                    int count = lessonRepository.countByCourseId(c.getId());
+                    CourseResponse response = toResponse(c, List.of());
+                    response.setTotalLessons(count);
+                    return response;
+                })
                 .toList();
     }
 
