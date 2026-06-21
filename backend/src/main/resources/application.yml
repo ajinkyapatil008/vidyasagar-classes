@@ -1,0 +1,66 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: vidyasagar-backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/vidyasagar?TimeZone=Asia/Kolkata
+    username: vidya_admin
+    password: vidyasagar123
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-init-sql: SET TIME ZONE 'UTC'
+#      connection-timeout: 20000
+#      maximum-pool-size: 5
+#      initialization-fail-timeout: -1
+
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        JDBC:
+          time_zone: UTC
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/vidyasagar_progress
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  health:
+    mongo:
+      enabled: false
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: VidyaSagar Classes
+    description: Online Learning Platform
+    version: 1.0.0
+
+jwt:
+  secret: vidyasagar-super-secret-key-change-this-in-production-2024
+  expiry-ms: 900000
+  refresh-expiry-ms: 604800000
+
+storage:
+  local-path: video-storage
+  base-url: http://localhost:8080/api/videos/raw
