@@ -30,9 +30,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
-                        // Public course browsing — no login needed
                         .requestMatchers(org.springframework.http.HttpMethod.GET,
                                 "/api/courses", "/api/courses/{id}").permitAll()
+                        // Raw video bytes — public fetch, but key is only revealed after access check
+                        .requestMatchers(org.springframework.http.HttpMethod.GET,
+                                "/api/videos/raw/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // Return 401 instead of redirecting to login page
